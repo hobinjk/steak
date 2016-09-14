@@ -23,37 +23,7 @@ function makeSegments() {
 
 }
 
-function gcd(a, b) {
-  while (Math.abs(a - b) > 0.001) {
-    if (a > b) {
-      a -= b;
-    } else {
-      b -= a;
-    }
-  }
-  return a;
-}
-
-function lcm(values) {
-  var product = values.reduce(function(a, b) {
-    return a * b;
-  });
-
-  var denom = values.reduce(gcd);
-  return product / Math.pow(denom, values.length - 1);
-}
-
 var cycleDuration = 2 * Math.PI / baseSpeed;
-
-// function end(segments) {
-//   var speeds = segments.map(function(segment) {
-//     return Math.abs(segment.speed);
-//   });
-//
-//   var lcmSpeed = lcm(speeds);
-//   return 2 * Math.PI / baseSpeed;
-// }
-
 
 var segments = [];
 
@@ -82,28 +52,18 @@ function create() {
 
   draw();
 }
-var drawing = true;
 
 function regenerate() {
-  drawing = true;
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, width, height);
   segments = makeSegments();
   ctx.lineWidth = 2;
   ctx.strokeStyle = 'hsla(' + Math.random() * 360 + ', 100%, 50%, 1)';
-  nextChange = Date.now() + cycleDuration * 2;
+  nextChange = Date.now() + cycleDuration + 2000;
   lastPoint = null;
 }
 
 function draw() {
-  if (Date.now() >= nextChange - cycleDuration) {
-    if (drawing) {
-      drawing = false;
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = 'black';
-    }
-  }
-
   if (Date.now() > nextChange) {
     regenerate();
   }
@@ -111,6 +71,10 @@ function draw() {
   var dt = Date.now() - lastUpdate;
   if (dt > 50) {
     dt = 50;
+  }
+
+  if (Date.now() > nextChange - 1500) {
+    dt = 0;
   }
 
   var point = {
