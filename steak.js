@@ -34,6 +34,7 @@ var lastPoint;
 var nextChange;
 var lastUpdate;
 var ctx;
+var drawing = false;
 
 function create() {
   width = Math.min(window.innerHeight, window.innerWidth) * 2;
@@ -50,7 +51,10 @@ function create() {
 
   regenerate();
 
-  draw();
+  if (!drawing) {
+    drawing = true;
+    draw();
+  }
 }
 
 function regenerate() {
@@ -101,6 +105,8 @@ function draw() {
 
   requestAnimationFrame(draw);
 }
+
+create();
 
 document.body.addEventListener('click', function() {
   document.body.requestFullscreen();
